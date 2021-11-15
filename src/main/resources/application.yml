@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://jwshin77.iptime.org:3307/jihee
+    username: jihee
+    password: Jihee12345678!
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    show-sql: true
+
+
