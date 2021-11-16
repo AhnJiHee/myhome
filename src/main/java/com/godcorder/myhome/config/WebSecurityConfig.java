@@ -16,7 +16,12 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import javax.sql.DataSource;
 
+//1개이상 Bean을 등록하고 있음을 나타내는 어노테이션
 @Configuration
+
+//WebSecurityConfigurerAdapter를 상속받은 config 클래스에
+//@EnableWebSecurity 어노테이션을 달면
+//SpringSecurityFilterChain이 자동으로 포함
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -27,11 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/", "/css/**", "/account/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/account/login")
                 .permitAll()
                 .and()
                 .logout()
@@ -47,10 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("select username,password,enabled "
                         + "from user "
                         + "where username = ?") //로그인 처리
-                .authoritiesByUsernameQuery("select username, name "
+                .authoritiesByUsernameQuery("select u.username, r.name "
                         + "from user_role ur inner join user u on ur.user_id = u.id "
                         + " inner join role r on ur.role_id = r.id "
-                        + "where email = ?"); //권한처리
+                        + "where u.username = ?"); //권한처리
     }
 
     @Bean
